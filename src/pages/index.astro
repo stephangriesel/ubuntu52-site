@@ -113,17 +113,25 @@ let permalink = "https://ubuntu52.com/";
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add("scroll-animation");
-            } else {
-              entry.target.classList.remove("scroll-animation");
+              // Check for "seen" class and element visibility
+              if (
+                !entry.target.classList.contains("seen") &&
+                entry.target.offsetParent !== null
+              ) {
+                entry.target.classList.add("scroll-animation");
+                entry.target.classList.add("seen");
+
+                // Unobserve element after animation (optional)
+                observer.unobserve(entry.target);
+              }
             }
           });
         },
         { threshold: 0.1 }
       );
+
       for (let i = 0; i < the_animation.length; i++) {
         const elements = the_animation[i];
-
         observer.observe(elements);
       }
     </script>
